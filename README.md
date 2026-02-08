@@ -26,17 +26,17 @@ A interactive sliding puzzle website to ask someone to be your Valentine!
    - `tile-3.png` will be the empty space (top-right) but appear once the puzzle is completed
 
 2. **Change relevant strings**
-   - Unless your girl is also named "Gaby" it'd be real awkward if you forget to do this
-   - 
+   - Unless your girl is also named "Nancy" it'd be real awkward if you forget to do this
+   -
 
-4. **Deploy to GitHub Pages:**
+3. **Deploy to GitHub Pages:**
    - Go to repository Settings
    - Navigate to Pages section
    - Source: Deploy from branch
    - Branch: main (or master)
    - Click Save
 
-5. **Share the link!**
+4. **Share the link!**
    - Your site will be at: `https://YOUR-USERNAME.github.io/valentine-puzzle/`
 
 ## How It Works

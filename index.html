@@ -893,6 +893,7 @@
             }
         }
 
+        /* Music Toggle Button - Hidden during envelope stage */
         .music-toggle {
             position: fixed;
             bottom: 40px;
@@ -906,9 +907,13 @@
             box-shadow: 0 8px 20px rgba(196, 30, 58, 0.4);
             transition: all 0.3s ease;
             z-index: 10000;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
+        }
+
+        body.show-modal .music-toggle {
+            display: flex;
         }
 
         .music-toggle:hover {
@@ -963,39 +968,7 @@
             display: block;
         }
 
-        /* Play Me text indicator */
-        .music-toggle::after {
-            content: 'Play Me';
-            position: absolute;
-            bottom: -35px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(196, 30, 58, 0.95);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            white-space: nowrap;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            animation: playMePulse 1.5s ease-in-out infinite;
-            font-family: system-ui, sans-serif;
-        }
 
-        .music-toggle.playing::after {
-            display: none;
-        }
-
-        @keyframes playMePulse {
-            0%, 100% {
-                opacity: 1;
-                transform: translateX(-50%) scale(1);
-            }
-            50% {
-                opacity: 0.8;
-                transform: translateX(-50%) scale(1.05);
-            }
-        }
 
         @media (max-width: 600px) {
             .music-toggle {
@@ -1168,7 +1141,7 @@
     </div>
 
     <!-- Music Control Button -->
-    <button class="music-toggle" id="musicToggle" aria-label="Pause Music">
+    <button class="music-toggle" id="musicToggle" aria-label="Play Music">
         <span class="play-icon"></span>
         <span class="pause-icon"></span>
     </button>
@@ -1188,6 +1161,34 @@
         const puzzleGrid = document.getElementById('puzzleGrid');
         const puzzleView = document.getElementById('puzzleView');
         const successView = document.getElementById('successView');
+        
+        // Background Music Controls
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        let isMusicPlaying = false;
+
+        function playBackgroundMusic() {
+            bgMusic.currentTime = 32;
+            bgMusic.play().then(() => {
+                isMusicPlaying = true;
+                musicToggle.classList.add('playing');
+            }).catch(err => {
+                console.log('Audio autoplay blocked:', err);
+            });
+        }
+
+        musicToggle.addEventListener('click', () => {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicToggle.classList.remove('playing');
+                isMusicPlaying = false;
+            } else {
+                bgMusic.currentTime = 32;
+                bgMusic.play();
+                musicToggle.classList.add('playing');
+                isMusicPlaying = true;
+            }
+        });
         
         envelope.addEventListener('click', () => {
             envelope.style.pointerEvents = 'none';
@@ -1380,35 +1381,7 @@
             });
         }
 
-        // Background Music Controls
-        const bgMusic = document.getElementById('bgMusic');
-        const musicToggle = document.getElementById('musicToggle');
-        let isMusicPlaying = false;
 
-        function playBackgroundMusic() {
-            bgMusic.currentTime = 32;
-            bgMusic.play().then(() => {
-                isMusicPlaying = true;
-                musicToggle.classList.add('playing');
-            }).catch(err => {
-                // If autoplay blocked, show the play button with "Play Me" indicator
-                console.log('Audio autoplay blocked - user interaction required:', err);
-                isMusicPlaying = false;
-                musicToggle.classList.remove('playing');
-            });
-        }
-
-        musicToggle.addEventListener('click', () => {
-            if (isMusicPlaying) {
-                bgMusic.pause();
-                musicToggle.classList.remove('playing');
-                isMusicPlaying = false;
-            } else {
-                bgMusic.play();
-                musicToggle.classList.add('playing');
-                isMusicPlaying = true;
-            }
-        });
 
         // Rose Petals Animation
         const rosePetalsContainer = document.getElementById('rosePetals');
